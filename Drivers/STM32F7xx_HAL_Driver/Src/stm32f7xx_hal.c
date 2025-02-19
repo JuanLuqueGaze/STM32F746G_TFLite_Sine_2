@@ -135,31 +135,30 @@ HAL_TickFreqTypeDef uwTickFreq = HAL_TICK_FREQ_DEFAULT;  /* 1KHz */
   *         to have correct HAL operation.
   * @retval HAL status
   */
-HAL_StatusTypeDef HAL_Init(void)
-{
-  /* Configure Instruction cache through ART accelerator */ 
-#if (ART_ACCLERATOR_ENABLE != 0)
-   __HAL_FLASH_ART_ENABLE();
-#endif /* ART_ACCLERATOR_ENABLE */
-
-  /* Configure Flash prefetch */
-#if (PREFETCH_ENABLE != 0U)
-  __HAL_FLASH_PREFETCH_BUFFER_ENABLE();
-#endif /* PREFETCH_ENABLE */
-
-  /* Set Interrupt Group Priority */
-  HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
-
-  /* Use systick as time base source and configure 1ms tick (default clock after Reset is HSI) */
-  HAL_InitTick(TICK_INT_PRIORITY);
-  
-  /* Init the low level hardware */
-  HAL_MspInit();
-  
-  /* Return function status */
-  return HAL_OK;
-}
-
+ HAL_StatusTypeDef HAL_Init(void)
+ {
+   /* Configure Instruction cache through ART accelerator */ 
+ #if (ART_ACCLERATOR_ENABLE != 0)
+    __HAL_FLASH_ART_ENABLE();
+ #endif /* ART_ACCLERATOR_ENABLE */
+ 
+   /* Configure Flash prefetch */
+ #if (PREFETCH_ENABLE != 0U)
+   __HAL_FLASH_PREFETCH_BUFFER_ENABLE();
+ #endif /* PREFETCH_ENABLE */
+ 
+   /* Set Interrupt Group Priority */
+   HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+ 
+   /* Use systick as time base source and configure 1ms tick (default clock after Reset is HSI) */
+   HAL_InitTick(TICK_INT_PRIORITY);
+   
+   /* Init the low level hardware */
+   HAL_MspInit();
+   
+   /* Return function status */
+   return HAL_OK;
+ }
 /**
   * @brief  This function de-Initializes common part of the HAL and stops the systick.
   *         This function is optional.   
