@@ -22,16 +22,16 @@
 /* Private variables ---------------------------------------------------------*/
 namespace
 {
-tflite::ErrorReporter* error_reporter = nullptr;
-const tflite::Model* model = nullptr;
-tflite::MicroInterpreter* interpreter = nullptr;
-TfLiteTensor* input = nullptr;
-TfLiteTensor* output = nullptr;
+  tflite::ErrorReporter* error_reporter = nullptr;
+  const tflite::Model* model = nullptr;
+  tflite::MicroInterpreter* interpreter = nullptr;
+  TfLiteTensor* model_input = nullptr;
+  TfLiteTensor* model_output = nullptr;
 
 // Create an area of memory to use for input, output, and intermediate arrays.
 // Finding the minimum value for your model may require some trial and error.
-constexpr uint32_t kTensorArenaSize = 2 * 1024;
-uint8_t tensor_arena[kTensorArenaSize];
+  constexpr uint32_t kTensorArenaSize = 2 * 1024;
+  uint8_t tensor_arena[kTensorArenaSize];
 }// namespace
 
 // This constant represents the range of x values our model was trained on,
@@ -114,8 +114,8 @@ int main(void)
   	}
 
   	// Obtain pointers to the model's input and output tensors.
-  	input = interpreter->input(0);
-  	output = interpreter->output(0);
+  	model_input = interpreter->input(0);
+  	model_output = interpreter->output(0);
 
     // We are dividing the whole input range with the number of inference
     // per cycle we want to show to get the unit value. We will then multiply
@@ -129,7 +129,7 @@ int main(void)
             {
               float x_val = static_cast<float>(inferenceCount) * unitValuePerDevision;
               // Place our calculated x value in the model's input tensor
-              input->data.f[0] = x_val;
+              model_input->data.f[0] = x_val;
               // Run inference, and report any error
               TfLiteStatus invoke_status = interpreter->Invoke();
               if (invoke_status != kTfLiteOk)
@@ -138,7 +138,7 @@ int main(void)
                   return 0;
               }
               // Read the predicted y value from the model's output tensor
-              float y_val = output->data.f[0];
+              float y_val = model_output->data.f[0];
               	        // Output the results. A custom function can be implemented
 	        // for each supported hardware target.
 	        handle_output(error_reporter, x_val, y_val);
