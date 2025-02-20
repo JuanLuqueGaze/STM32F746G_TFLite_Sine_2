@@ -1,7 +1,6 @@
 /**
   ******************************************************************************
-  * @file    debug_log.cpp
-  * @author  Fahad Mirza
+  * @file    debug_log.c
   * @brief   This file provides TensorFLow DebugLog() implementation
   ******************************************************************************
   */
@@ -13,7 +12,7 @@
 #include <stdio.h>
 
 /* Extern Variables ---------------------------------------------------------*/
-extern UART_HandleTypeDef DebugUartHandler;
+extern UART_HandleTypeDef DebugUartHandler;// Defined in main.cpp
 
 
 int __io_putchar(int ch)
