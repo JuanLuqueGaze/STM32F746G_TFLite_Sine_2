@@ -53,7 +53,7 @@ static void system_clock_config(void);
 static void cpu_cache_enable(void);
 static void error_handler(void);
 static void uart1_init(void);
-
+void handle_output(tflite::ErrorReporter* error_reporter, float x_value, float y_value);
 
 /* Private user code ---------------------------------------------------------*/
 /**
@@ -136,12 +136,21 @@ int main(void)
               float y_val = output->data.f[0];
               	        // Output the results. A custom function can be implemented
 	        // for each supported hardware target.
-	        LCD_Output(error_reporter, x_val, y_val);
+	        handle_output(error_reporter, x_val, y_val);
             }
     }
 
 }
 
+void handle_output(tflite::ErrorReporter* error_reporter, float x_value, float y_value)
+{
+	// Log the current X and Y values
+	TF_LITE_REPORT_ERROR(error_reporter, "x_value: %f, y_value: %f\n", x_value, y_value);
+
+	// A custom function can be implemented and used here to do something with the x and y values.
+	// In my case I will be plotting sine wave on an LCD.
+	LCD_Output(x_value, y_value);
+}
 
 /**
   * @brief  System Clock Configuration
